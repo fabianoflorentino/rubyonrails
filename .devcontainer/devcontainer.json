@@ -1,0 +1,50 @@
+{
+  "name": "Ruby on Rails",
+  "containerUser": "devcontainer",
+  "shutdownAction": "stopContainer",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/personal,type=bind,consistency=cached",
+  "workspaceFolder": "/workspaces/personal",
+  "build": {
+    "context": ".",
+    "dockerfile": "Dockerfile"
+  },
+  "containerEnv": {
+    "PATH": "/usr/local/bundle/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/devcontainer/.local/share/gem/ruby/3.2.0/bin"
+  },
+  "mounts": [
+    {
+      "source": "${localEnv:HOME}/.ssh",
+      "target": "/home/devcontainer/.ssh",
+      "type": "bind"
+    },
+    {
+      "source": "${localEnv:HOME}/.gitconfig.d",
+      "target": "/home/devcontainer/.gitconfig.d",
+      "type": "bind"
+    }
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "bierner.github-markdown-preview",
+        "bierner.markdown-checkbox",
+        "bierner.markdown-preview-github-styles",
+        "bierner.markdown-yaml-preamble",
+        "DavidAnson.vscode-markdownlint",
+        "donjayamanne.githistory",
+        "eamodio.gitlens",
+        "ms-azuretools.vscode-docker",
+        "GitHub.copilot",
+        "GitHub.github-vscode-theme",
+        "mhutchie.git-graph",
+        "oderwat.indent-rainbow",
+        "Shopify.ruby-extensions-pack",
+        "Shopify.ruby-lsp",
+        "misogi.ruby-rubocop",
+        "castwide.solargraph",
+        "mutantdino.resourcemonitor",
+        "qwtel.sqlite-viewer"
+      ]
+    }
+  }
+}
