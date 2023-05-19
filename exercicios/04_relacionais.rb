@@ -1,3 +1,7 @@
 # frozen_string_literal: true
 
-puts 7 % 2 if 1 != 2
+if 1 != 2
+  puts 7 % 2
+else
+  puts b
+end
