@@ -17,3 +17,11 @@ s = 'florentino'
 puts s[5]
 
 puts '-' * 120
+
+v = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+v.each do |item|
+  puts item
+end
+
+puts '-' * 120
