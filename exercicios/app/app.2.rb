@@ -3,7 +3,7 @@
 require 'json'
 require_relative '../12_pessoa'
 
-nome = 'ARGV[0]'
+nome = ARGV[0]
 
 estudante = Pessoa.new(nome)
 pessoa = { id: estudante.myid }
