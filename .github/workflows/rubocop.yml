@@ -25,4 +25,7 @@ jobs:
       run: gem install rubocop
 
     - name: Run RuboCop
-      run: rubocop --fail-fast --display-time
+      run: rubocop . -c .rubocopy.yml --fail-fast --display-time
+
+    - name: Run RuboCop on Rails
+      run: rubocop ./crypto_wallet -c ./crypto_wallet/.rubocop.yml --fail-fast --display-time
