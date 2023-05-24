@@ -22,7 +22,7 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby-version }}
     - name: Install RuboCop
-      run: gem install rubocop
+      run: gem install rubocop rubocop-minitest rubocop-packaging rubocop-performance rubocop-rails rubocop-md
 
     - name: Run RuboCop
       run: rubocop . -c .rubocop.yml --fail-fast --display-time

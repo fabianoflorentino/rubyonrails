@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Import GEMS
 require 'json'
 require_relative '../12_pessoa'
 
