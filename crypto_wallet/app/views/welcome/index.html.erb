@@ -1,2 +1,7 @@
-<h1>Welcome#index</h1>
-<p>Find me in app/views/welcome/index.html.erb</p>
+<h1>Welcome</h1>
+<p>
+  <strong>Data:</strong> <%= br_date(Date.today) %>
+</p>
+<p>
+<li><%= link_to "Register new Coin", coins_path %></li>
+</p>
