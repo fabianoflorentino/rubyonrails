@@ -1,14 +1,19 @@
 <p style="color: green"><%= notice %></p>
 
 <h1>Coins</h1>
+<table>
+  <tr>
+    <td>
+      <button>
+        <%= link_to "New coin", new_coin_path %>
+      </button>
+    </td>
+  </tr>
+</table>
 
 <div id="coins">
   <% @coins.each do |coin| %>
     <%= render coin %>
-    <p>
-      <%= link_to "Show this coin", coin %>
-    </p>
+    <button style="text-decoration: none;"><%= link_to "Details", coin %></button>
   <% end %>
 </div>
-
-<%= link_to "New coin", new_coin_path %>
