@@ -1,10 +1,13 @@
 <p style="color: green"><%= notice %></p>
 
 <%= render @coin %>
-
 <div>
-  <%= link_to "Edit this coin", edit_coin_path(@coin) %> |
-  <%= link_to "Back to coins", coins_path %>
-
+  <button>
+    <%= link_to "Edit this coin", edit_coin_path(@coin) %>
+  </button>
+  <button>
+    <%= link_to "Back to coins", coins_path %>
+  </button>
+  <br><br>
   <%= button_to "Destroy this coin", @coin, method: :delete %>
 </div>
