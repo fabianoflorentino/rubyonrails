@@ -1,11 +1,14 @@
-<table>
-  <tr>
-    <td>
-      <p>
-        <%= image_tag coin.url_image, width: 20, height: 20 %> <%= coin.description %><br>
-        <strong>Acronym:</strong>
-        <%= coin.acronym %><br>
-      </p>
+<table align="left" style="width:500px; background-color:#f2f2f2;">
+  <tr style="width:100px">
+    <td style="background-color:#e6e6e6;">
+      <%= image_tag coin.url_image, width: 20, height: 20 %> <%= coin.description %><br>
+      <strong>Acronym: </strong><%= coin.acronym %><br>
+      <strong>Percentage Change 7 Days: </strong><%= coin.percentagechange7d %>
+      <th style="background-color:#e6e6e6;">
+        <%= button_to "Delete this coin", edit_coin_path(coin), method: :delete %>
+      </th>
+      <th style="background-color:#e6e6e6;">
+        <%= button_to "Edit this coin", edit_coin_path(coin), method: :get %>
+      </th>
     </td>
-  <tr>
 </table>

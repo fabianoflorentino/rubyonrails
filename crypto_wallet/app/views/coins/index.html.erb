@@ -3,17 +3,12 @@
 <h1>Coins</h1>
 <table>
   <tr>
-    <td>
-      <button>
-        <%= link_to "New coin", new_coin_path %>
-      </button>
-    </td>
+    <td><%= button_to "New coin", new_coin_path, method: :get %></td>
   </tr>
 </table>
-
+<br>
 <div id="coins">
   <% @coins.each do |coin| %>
     <%= render coin %>
-    <button><%= link_to "Details", coin %></button>
   <% end %>
 </div>

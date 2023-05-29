@@ -1,10 +1,3 @@
 <h1>Editing coin <%= image_tag @coin.url_image, width: 20, height: 20 %></h1>
 
 <%= render "form", coin: @coin %>
-
-<br>
-
-<div>
-  <button><%= link_to "Show this coin", @coin %></button>
-  <button><%= link_to "Back to coins", coins_path %></button>
-</div>

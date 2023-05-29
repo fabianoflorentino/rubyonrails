@@ -1,32 +1,49 @@
-<%= form_with(model: coin) do |form| %>
-  <% if coin.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(coin.errors.count, "error") %> prohibited this coin from being saved:</h2>
+<table align="left" style="width:520px; background-color:#f2f2f2;">
+  <tr>
+    <td>
+      <%= form_with(model: coin) do |form| %>
+        <% if coin.errors.any? %>
+          <div style="color: red">
+            <h2><%= pluralize(coin.errors.count, "error") %> prohibited this coin from being saved:</h2>
 
-      <ul>
-        <% coin.errors.each do |error| %>
-          <li><%= error.full_message %></li>
+            <ul>
+              <% coin.errors.each do |error| %>
+                <li><%= error.full_message %></li>
+              <% end %>
+            </ul>
+          </div>
         <% end %>
-      </ul>
-    </div>
-  <% end %>
 
-  <div>
-    <%= form.label :description, style: "display: block" %>
-    <%= form.text_field :description %>
-  </div>
+        <tr>
+          <td><%= form.label :description, style: "display: block" %></td>
+          <td><%= form.text_field :description %></td>
+        </tr>
 
-  <div>
-    <%= form.label :acronym, style: "display: block" %>
-    <%= form.text_field :acronym %>
-  </div>
+        <tr>
+          <td><%= form.label :acronym, style: "display: block" %></td>
+          <td><%= form.text_field :acronym %></td>
+        </tr>
 
-  <div>
-    <%= form.label :url_image, style: "display: block" %>
-    <%= form.text_field :url_image %>
-  </div>
-  <br>
-  <div>
-    <%= form.submit %>
-  </div>
-<% end %>
+        <tr>
+          <td><%= form.label :percentagechange7d, style: "display: block" %></td>
+          <td><%= form.text_field :percentagechange7d %></td>
+        </tr>
+
+        <tr>
+          <td><%= form.label :url_image, style: "display: block" %></td>
+          <td><%= form.text_field :url_image %></td>
+        </tr>
+        <br>
+
+        <tr>
+          <td><%= form.submit %></td>
+        </tr>
+      <% end %>
+      <td>
+        <%= button_to "Cancel", coins_path, method: :get %>
+        <td><%= button_to "Back to coins", coins_path, method: :get %></td>
+        <td><%= button_to "Delete this coin", @coin, method: :delete %></td>
+      </td>
+    </td>
+  </tr>
+</table>

@@ -1,7 +1,12 @@
 <h1>Welcome</h1>
-<p>
-  <strong>Data:</strong> <%= br_date(Date.today) %>
-</p>
-<p>
-  <button href="#" class="buttonClass"><%= link_to "Register new Coin", coins_path %></button>
-</p>
+
+<table align="left" style="width:300px; background-color:#f2f2f2;">
+  <tr>
+    <td><strong>Data:</strong> <%= br_date(Date.today) %></td>
+    <td><%= button_to "Coins", coins_path, method: :get %></td>
+    <td><%= button_to "New coin", new_coin_path, method: :get %></td>
+  </tr>
+  <tr>
+
+  </tr>
+</table>
