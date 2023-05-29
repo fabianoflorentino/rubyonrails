@@ -14,7 +14,7 @@ def scraper_percentage_chage7d
 
   results = []
 
-  rows.take(10).each do |row|
+  rows.take(30).each do |row|
     coin_name = row.css('.left.bold.elp.name.cryptoName.first.js-currency-name').text.strip
     var7 = row.css('.js-currency-change-7d.greenFont').text.strip
 
