@@ -10,12 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_23_035907) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_29_133818) do
   create_table "coins", force: :cascade do |t|
     t.string "description"
     t.string "acronym"
     t.string "url_image"
+    t.string "percentagechange7d"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
 end

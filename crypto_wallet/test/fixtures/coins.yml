@@ -4,8 +4,10 @@ one:
   description: MyString
   acronym: MyString
   url_image: MyString
+  percentagechange7d: MyString
 
 two:
   description: MyString
   acronym: MyString
   url_image: MyString
+  percentagechange7d: MyString

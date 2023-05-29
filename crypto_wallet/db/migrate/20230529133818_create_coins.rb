@@ -4,6 +4,7 @@ class CreateCoins < ActiveRecord::Migration[7.0]
       t.string :description
       t.string :acronym
       t.string :url_image
+      t.string :percentagechange7d
 
       t.timestamps
     end
