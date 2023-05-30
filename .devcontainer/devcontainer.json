@@ -29,6 +29,7 @@
     "vscode": {
       "extensions": [
         "bierner.github-markdown-preview",
+        "AMiner.codegeex",
         "bierner.markdown-checkbox",
         "bierner.markdown-preview-github-styles",
         "bierner.markdown-yaml-preamble",
@@ -36,7 +37,6 @@
         "donjayamanne.githistory",
         "eamodio.gitlens",
         "ms-azuretools.vscode-docker",
-        "GitHub.copilot",
         "GitHub.github-vscode-theme",
         "mhutchie.git-graph",
         "oderwat.indent-rainbow",

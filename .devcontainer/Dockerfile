@@ -141,14 +141,12 @@ RUN mkdir -p "$GEM_HOME" \
   && adduser --disabled-password --gecos "" devcontainer \
   && apt-get update \
   && apt-get install -y openssh-client sshpass libpam-runtime libxml2 gnupg git curl \
-    ruby-dev sqlite3 vim make gcc g++ \
-  && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && apt install -y nodejs \
-  && curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
-  && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
-  && apt -y update && apt install -y yarn
+    ruby-dev sqlite3 vim make gcc g++
 
 USER devcontainer
 
-RUN gem install --user-install rails bundler rubocop rubocop-rails solargraph
+RUN gem install --user-install rails bundler \
+  rubocop rubocop-rails rubocop-minitest \
+  rubocop-packaging rubocop-performance  rubocop-md solargraph
 
 CMD [ "irb" ]
