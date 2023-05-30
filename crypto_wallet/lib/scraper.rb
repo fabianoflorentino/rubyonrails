@@ -1,25 +1,25 @@
 # frozen_literal_string: true
 
-require 'nokogiri'
-require 'httparty'
-require 'json'
+require "nokogiri"
+require "httparty"
+require "json"
 
 def scraper_percentage_chage7d
   url = "https://br.investing.com/crypto/currencies"
   get_url = HTTParty.get(url)
   data = Nokogiri::HTML(get_url.body)
 
-  table = data.css('tbody')
-  rows = table.css('tr')
+  table = data.css("tbody")
+  rows = table.css("tr")
 
-  results = []
+  # results = []
 
   rows.take(30).each do |row|
-    coin_name = row.css('.left.bold.elp.name.cryptoName.first.js-currency-name').text.strip
-    var7 = row.css('.js-currency-change-7d.greenFont').text.strip
+    coin_name = row.css(".left.bold.elp.name.cryptoName.first.js-currency-name").text.strip
+    var7 = row.css(".js-currency-change-7d.greenFont").text.strip
 
-    acronym = row.css('.left.noWrap.elp.symb.js-currency-symbol').text.strip
-    url_image = "https://i-invdn-com.investing.com/ico_flags/80x80/v32/#{coin_name.downcase}.png".gsub(' ','-')
+    acronym = row.css(".left.noWrap.elp.symb.js-currency-symbol").text.strip
+    url_image = "https://i-invdn-com.investing.com/ico_flags/80x80/v32/#{coin_name.downcase}.png".tr(" ", "-")
 
     # result = {
     #   name: coin_name,
