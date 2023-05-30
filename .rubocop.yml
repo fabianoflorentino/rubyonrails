@@ -1,5 +1,7 @@
 ---
 AllCops:
+  NewCops: enable
+  SuggestExtensions: false
   TargetRubyVersion: 3.0
   Exclude:
     - './crypto_wallet/**/*'
