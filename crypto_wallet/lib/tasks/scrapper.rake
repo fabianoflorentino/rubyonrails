@@ -10,8 +10,10 @@ namespace :scrapper do
 
   desc "JSON data"
   task json_scraper_data_coin: :environment do
-    scrapper = ScrapperCoin.new
-    scrapper.json_scraper_data_coin
+    show_spinner "Buscando as informações..." do
+      scrapper = ScrapperCoin.new
+      scrapper.json_scraper_data_coin
+    end
   end
 
   desc "Database data"
