@@ -1,46 +1,85 @@
-# frozen_literal_string: true
+# frozen_string_literal: true
 
 require "nokogiri"
 require "httparty"
 require "json"
 
-def scraper_percentage_chage7d
-  url = "https://br.investing.com/crypto/currencies"
-  get_url = HTTParty.get(url)
-  data = Nokogiri::HTML(get_url.body)
+SCRAPPER_URL = "https://br.investing.com/crypto/currencies"
+SCRAPPER_URL_COIN = "https://br.investing.com/crypto"
+SCRAPPER_IMG_URL = "https://i-invdn-com.investing.com/ico_flags/80x80/v32"
 
-  table = data.css("tbody")
-  rows = table.css("tr")
+class CoinDTO
+  attr_reader :coin_name, :acronym, :var7, :url_image
 
-  # results = []
+  def initialize(coin_name, acronym, var7, url_image)
+    @coin_name = coin_name
+    @acronym = acronym
+    @var7 = var7
+    @url_image = url_image
+  end
+end
 
-  rows.take(30).each do |row|
+# Scrapper Coin
+class ScrapperCoin
+  def scraper_data_coin
+    url = SCRAPPER_URL
+    get_url = HTTParty.get(url)
+    data = Nokogiri::HTML(get_url.body)
+
+    table = data.css("tbody")
+    @rows = table.css("tr")
+
+    @rows
+  end
+
+  def scrapper_filter(row)
     coin_name = row.css(".left.bold.elp.name.cryptoName.first.js-currency-name").text.strip
-    var7 = row.css(".js-currency-change-7d.greenFont").text.strip
-
     acronym = row.css(".left.noWrap.elp.symb.js-currency-symbol").text.strip
-    url_image = "https://i-invdn-com.investing.com/ico_flags/80x80/v32/#{coin_name.downcase}.png".tr(" ", "-")
+    var7 = row.css(".js-currency-change-7d.greenFont", ".js-currency-change-7d.redFont").text.strip
+    url_image = "#{SCRAPPER_IMG_URL}/#{coin_name.downcase}.png".tr(" ", "-")
 
-    # result = {
-    #   name: coin_name,
-    #   percent_change_7d: var7,
-    #   acronym: acronym,
-    #   url_image: url_image
-    # }
+    url_consult = HTTParty.get(url_image)
+    if url_consult.code >= 400
+      url_image = "#{SCRAPPER_IMG_URL}/#{coin_name.downcase}-new.png".tr(" ", "-")
+    end
 
-    # results << result
+    CoinDTO.new(coin_name, acronym, var7, url_image)
+  end
 
-    crypto_currency = Coin.find_by(description: coin_name)
-    Coin.create(description: coin_name, acronym: acronym, url_image: url_image, percentagechange7d: var7) unless crypto_currency
+  def json_scraper_data_coin(numer_of_coins)
+    rows = scraper_data_coin
 
-    if crypto_currency
-      crypto_currency.update(acronym: acronym)
-      crypto_currency.update(url_image: url_image)
-      crypto_currency.update(percentagechange7d: var7)
+    rows.take(numer_of_coins).map do |row|
+      coin_filter = scrapper_filter(row)
+
+      {
+        name: coin_filter.coin_name,
+        acronym: coin_filter.acronym,
+        var7: coin_filter.var7,
+        image: coin_filter.url_image
+      }
     end
   end
 
-  # puts JSON.pretty_generate(results)
+  def db_scraper_data_coin(numer_of_coins)
+    rows = scraper_data_coin
+
+    rows.take(numer_of_coins).each do |row|
+      coin_filter = scrapper_filter(row)
+
+      crypto_currency = Coin.find_or_initialize_by!(description: coin_filter.coin_name)
+
+      crypto_currency.attributes = {
+        acronym: coin_filter.acronym,
+        url_image: coin_filter.url_image,
+        percentagechange7d: coin_filter.var7
+      }
+
+      crypto_currency.save!
+    end
+  end
 end
 
-# scraper_percentage_chage7d
+# JSON
+scrapper = ScrapperCoin.new
+puts scrapper.json_scraper_data_coin(15)
