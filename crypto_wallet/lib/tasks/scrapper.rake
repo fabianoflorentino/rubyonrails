@@ -12,7 +12,7 @@ namespace :scrapper do
   task json_scraper_data_coin: :environment do
     show_spinner "Buscando as informações..." do
       scrapper = ScrapperCoin.new
-      scrapper.json_scraper_data_coin(30)
+      puts scrapper.json_scraper_data_coin(100)
     end
   end
 
@@ -20,7 +20,7 @@ namespace :scrapper do
   task db_scraper_data_coin: :environment do
     show_spinner "Carregando dados..." do
       scrapper = ScrapperCoin.new
-      scrapper.db_scraper_data_coin(30)
+      scrapper.db_scraper_data_coin(100)
     end
   end
 
@@ -31,7 +31,7 @@ namespace :scrapper do
     show_spinner("Migrando BD...") { %x(rails db:migrate) }
     show_spinner "Carregando dados..." do
       scrapper = ScrapperCoin.new
-      scrapper.db_scraper_data_coin(30)
+      scrapper.db_scraper_data_coin(100)
     end
   end
 end
