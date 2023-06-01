@@ -4,10 +4,12 @@ require "nokogiri"
 require "httparty"
 require "json"
 
+# Constant with URLs address to scrap data from website.
 SCRAPPER_URL = "https://br.investing.com/crypto/currencies"
 SCRAPPER_URL_COIN = "https://br.investing.com/crypto"
 SCRAPPER_IMG_URL = "https://i-invdn-com.investing.com/ico_flags/80x80/v32"
 
+# DTO Class
 class CoinDTO
   attr_reader :coin_name, :acronym, :var7, :url_image
 
@@ -36,14 +38,28 @@ class ScrapperCoin
     coin_name = row.css(".left.bold.elp.name.cryptoName.first.js-currency-name").text.strip
     acronym = row.css(".left.noWrap.elp.symb.js-currency-symbol").text.strip
     var7 = row.css(".js-currency-change-7d.greenFont", ".js-currency-change-7d.redFont").text.strip
-    url_image = "#{SCRAPPER_IMG_URL}/#{coin_name.downcase}.png".tr(" ", "-")
+    @url_image = "#{SCRAPPER_IMG_URL}/#{coin_name.downcase}.png".tr(" ", "-")
 
-    url_consult = HTTParty.get(url_image)
-    if url_consult.code >= 400
-      url_image = "#{SCRAPPER_IMG_URL}/#{coin_name.downcase}-new.png".tr(" ", "-")
+    begin
+      # Array of the image extensions
+      img_name_extension = ["new", "ape"]
+
+      # Loop to test URLs with image extensions
+      img_name_extension.each do |extn|
+        url_consult = HTTParty.get("#{SCRAPPER_IMG_URL}/#{coin_name.downcase}-#{extn}.png".tr(" ", "-"))
+
+        # If URL is valid, then variable is populate with the URL with extension.
+        if url_consult.code.between?(200, 226)
+          @url_image = "#{SCRAPPER_IMG_URL}/#{coin_name.downcase}-#{extn}.png".tr(" ", "-")
+        end
+      end
+    # Capture if timeout occurs
+    rescue OpenTimeout
+      "Failed to open TCP connection to: #{@url_image}"
     end
 
-    CoinDTO.new(coin_name, acronym, var7, url_image)
+    # Instance new object with coin data
+    CoinDTO.new(coin_name, acronym, var7, @url_image)
   end
 
   def json_scraper_data_coin(numer_of_coins)
