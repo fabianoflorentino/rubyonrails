@@ -54,7 +54,7 @@ class ScrapperCoin
         end
       end
     # Capture if timeout occurs
-    rescue OpenTimeout
+    rescue Net::OpenTimeout
       "Failed to open TCP connection to: #{@url_image}"
     end
 
