@@ -27,6 +27,18 @@ services:
     ports:
       - 3306:3306
 
+  redis:
+    image: redis
+    command: redis-server
+    depends_on:
+      - devcontainer
+    networks:
+      - devcontainer
+    environment:
+      ALLOW_EMPTY_PASSWORD: yes
+    ports:
+      - 6379:6379
+
 volumes:
   mysql:
 
