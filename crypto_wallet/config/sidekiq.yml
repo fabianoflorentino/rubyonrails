@@ -1,0 +1,5 @@
+:scheduler:
+  :schedule:
+    getdatacoin:
+      cron: "*/10 * * * *"
+      class: "GetdatacoinJob"
