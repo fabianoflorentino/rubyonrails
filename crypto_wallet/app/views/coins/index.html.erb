@@ -4,6 +4,7 @@
 <table>
   <tr>
     <td><%= button_to "New coin", new_coin_path, method: :get %></td>
+    <td>Registered coins: <%= @coins.all.count %></td>
   </tr>
 </table>
 <br>
