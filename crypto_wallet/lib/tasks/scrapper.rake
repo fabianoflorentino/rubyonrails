@@ -9,7 +9,7 @@ namespace :scrapper do
   end
 
   desc "JSON data"
-  task json_scraper_data_coin: :environment do
+  task json_scrapper_data_coin: :environment do |_task|
     show_spinner "Buscando as informações..." do
       scrapper = ScrapperCoin.new
       puts scrapper.json_scraper_data_coin(100)
@@ -17,7 +17,7 @@ namespace :scrapper do
   end
 
   desc "Database data"
-  task db_scraper_data_coin: :environment do
+  task db_scrapper_data_coin: :environment do |_task|
     show_spinner "Carregando dados..." do
       scrapper = ScrapperCoin.new
       scrapper.db_scraper_data_coin(100)
@@ -25,7 +25,7 @@ namespace :scrapper do
   end
 
   desc "Database rebuild"
-  task db_rebuild: :environment do
+  task db_rebuild: :environment do |_tasks|
     show_spinner("Apagando BD...") { %x(rails db:drop) }
     show_spinner("Criando BD...") { %x(rails db:create) }
     show_spinner("Migrando BD...") { %x(rails db:migrate) }
