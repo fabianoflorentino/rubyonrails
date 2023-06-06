@@ -81,13 +81,13 @@ class ScrapperCoin
     rows = scraper_data_coin
 
     # Cleanup coin register in database
-    Coin.destroy_all
+    Coin.in_bataches(batch_size: 10).destroy_all
 
     # Register or Update coins in database
     rows.take(numer_of_coins).each do |row|
       coin_filter = scrapper_filter(row)
 
-      crypto_currency = Coin.find_or_initialize_by(description: coin_filter.coin_name)
+      crypto_currency = Coin.in_batches(batch_size: 50).find_or_initialize_by(description: coin_filter.coin_name)
 
       crypto_currency.attributes = {
         acronym: coin_filter.acronym,
