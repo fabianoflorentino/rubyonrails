@@ -80,6 +80,10 @@ class ScrapperCoin
   def db_scraper_data_coin(numer_of_coins)
     rows = scraper_data_coin
 
+    # Cleanup coin register in database
+    Coin.destroy_all
+
+    # Register or Update coins in database
     rows.take(numer_of_coins).each do |row|
       coin_filter = scrapper_filter(row)
 
