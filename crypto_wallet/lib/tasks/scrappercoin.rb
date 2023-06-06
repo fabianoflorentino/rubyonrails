@@ -11,12 +11,13 @@ SCRAPPER_IMG_URL = "https://i-invdn-com.investing.com/ico_flags/80x80/v32"
 
 # DTO Class
 class CoinDTO
-  attr_reader :coin_name, :acronym, :var7, :url_image
+  attr_reader :coin_name, :acronym, :var7, :var24h, :url_image
 
-  def initialize(coin_name, acronym, var7, url_image)
+  def initialize(coin_name, acronym, var7, var24h, url_image)
     @coin_name = coin_name
     @acronym = acronym
     @var7 = var7
+    @var24h = var24h
     @url_image = url_image
   end
 end
@@ -38,6 +39,7 @@ class ScrapperCoin
     coin_name = row.css(".left.bold.elp.name.cryptoName.first.js-currency-name").text.strip
     acronym = row.css(".left.noWrap.elp.symb.js-currency-symbol").text.strip
     var7 = row.css(".js-currency-change-7d.greenFont", ".js-currency-change-7d.redFont").text.strip
+    var24h = row.css(".js-currency-change-24h.greenFont", ".js-currency-change-24h.redFont").text.strip
     @url_image = "#{SCRAPPER_IMG_URL}/#{coin_name.downcase}.png".tr(" ", "-")
 
     begin
@@ -59,7 +61,7 @@ class ScrapperCoin
     end
 
     # Instance new object with coin data
-    CoinDTO.new(coin_name, acronym, var7, @url_image)
+    CoinDTO.new(coin_name, acronym, var7, var24h, @url_image)
   end
 
   def json_scraper_data_coin(numer_of_coins)
@@ -72,6 +74,7 @@ class ScrapperCoin
         name: coin_filter.coin_name,
         acronym: coin_filter.acronym,
         var7: coin_filter.var7,
+        var24h: coin_filter.var24h,
         image: coin_filter.url_image
       }
     end
@@ -81,18 +84,19 @@ class ScrapperCoin
     rows = scraper_data_coin
 
     # Cleanup coin register in database
-    Coin.in_bataches(batch_size: 10).destroy_all
+    Coin.in_batches(of: 50).destroy_all
 
     # Register or Update coins in database
     rows.take(numer_of_coins).each do |row|
       coin_filter = scrapper_filter(row)
 
-      crypto_currency = Coin.in_batches(batch_size: 50).find_or_initialize_by(description: coin_filter.coin_name)
+      crypto_currency = Coin.find_or_initialize_by(description: coin_filter.coin_name)
 
       crypto_currency.attributes = {
         acronym: coin_filter.acronym,
-        url_image: coin_filter.url_image,
-        percentagechange7d: coin_filter.var7
+        percentagechange7d: coin_filter.var7,
+        percentagechange24h: coin_filter.var24h,
+        url_image: coin_filter.url_image
       }
 
       crypto_currency.save!
