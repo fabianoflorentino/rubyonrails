@@ -4,6 +4,8 @@ require "nokogiri"
 require "httparty"
 require "json"
 
+require_relative "scrapperurlcoin"
+
 # Constant with URLs address to scrap data from website.
 SCRAPPER_URL = "https://br.investing.com/crypto/currencies"
 SCRAPPER_URL_COIN = "https://br.investing.com/crypto"
@@ -11,14 +13,13 @@ SCRAPPER_IMG_URL = "https://i-invdn-com.investing.com/ico_flags/80x80/v32"
 
 # DTO Class
 class CoinDTO
-  attr_reader :coin_name, :acronym, :var7, :var24h, :url_image
+  attr_reader :coin_name, :acronym, :var7, :var24h
 
-  def initialize(coin_name, acronym, var7, var24h, url_image)
+  def initialize(coin_name, acronym, var7, var24h)
     @coin_name = coin_name
     @acronym = acronym
     @var7 = var7
     @var24h = var24h
-    @url_image = url_image
   end
 end
 
@@ -57,38 +58,50 @@ class ScrapperCoin
       end
     # Capture if timeout occurs
     rescue Net::OpenTimeout
-      "Failed to open TCP connection to: #{@url_image}"
+      "Failed to open TCP connection"
     end
 
     # Instance new object with coin data
-    CoinDTO.new(coin_name, acronym, var7, var24h, @url_image)
+    CoinDTO.new(coin_name, acronym, var7, var24h)
   end
 
-  def json_scraper_data_coin(numer_of_coins)
+  def json_scraper_data_coin(number_of_coins)
     rows = scraper_data_coin
+    url = ScrapperUrlCoin.new
 
-    rows.take(numer_of_coins).map do |row|
-      coin_filter = scrapper_filter(row)
+    threads = []
 
-      {
-        name: coin_filter.coin_name,
-        acronym: coin_filter.acronym,
-        var7: coin_filter.var7,
-        var24h: coin_filter.var24h,
-        image: coin_filter.url_image
-      }
+    rows.take(number_of_coins).map do |row|
+      threads << Thread.new(row) do |row_data|
+        coin_filter = scrapper_filter(row_data)
+        url_image = url.img_filter("#{SCRAPPER_URL_COIN}/#{coin_filter.coin_name.downcase}".tr(" ", "-"))
+
+        {
+          name: coin_filter.coin_name,
+          acronym: coin_filter.acronym,
+          var7: coin_filter.var7,
+          var24h: coin_filter.var24h,
+          image: url_image
+        }
+      end
     end
+
+    threads.each(&:join)
+    threads.map(&:value)
   end
 
-  def db_scraper_data_coin(numer_of_coins)
+  require 'concurrent'
+
+  def db_scraper_data_coin(number_of_coins)
     rows = scraper_data_coin
+    url = ScrapperUrlCoin.new
 
     # Cleanup coin register in database
     Coin.in_batches(of: 50).destroy_all
 
-    # Register or Update coins in database
-    rows.take(numer_of_coins).each do |row|
+    rows.take(number_of_coins).map do |row|
       coin_filter = scrapper_filter(row)
+      url_image = url.img_filter("#{SCRAPPER_URL_COIN}/#{coin_filter.coin_name.downcase}".tr(" ", "-"))
 
       crypto_currency = Coin.find_or_initialize_by(description: coin_filter.coin_name)
 
@@ -96,7 +109,7 @@ class ScrapperCoin
         acronym: coin_filter.acronym,
         percentagechange7d: coin_filter.var7,
         percentagechange24h: coin_filter.var24h,
-        url_image: coin_filter.url_image
+        url_image: url_image
       }
 
       crypto_currency.save!
