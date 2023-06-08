@@ -128,6 +128,7 @@ GEM
     minitest (5.18.0)
     msgpack (1.7.1)
     multi_xml (0.6.0)
+    mysql2 (0.5.5)
     net-imap (0.3.4)
       date
       net-protocol
@@ -285,6 +286,7 @@ DEPENDENCIES
   httparty
   importmap-rails
   jbuilder
+  mysql2
   nokogiri
   pry-rails
   puma (~> 5.0)
